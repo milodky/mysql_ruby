@@ -1,0 +1,29 @@
+keys:
+ - key: city
+   type: Address
+   size: 5
+ - key: first_name 
+   type: Name
+   size: 5
+ - key: last_name
+   type: Name
+   size: 5
+size: 10
+
+source_path: people_info
+
+database_params:
+  user: root
+  database: local_test
+  table: people
+  schema:
+    primary_key: id
+    columns:
+      - name: city
+        type: String
+      - name: first_name
+        type: String
+      - name: last_name
+        type: String
+
+
