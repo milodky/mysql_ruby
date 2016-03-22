@@ -11,6 +11,7 @@ class DataSource
     super
     @keys = @params[:keys]
     @size = @params[:size]
+    return if @params[:data_path].present?
     @keys.each do |config|
       key = config[:key]
       type = config[:type]
@@ -27,7 +28,7 @@ class DataSource
     file = File.open(@params[:source_path], 'w')
     data = 
       if @params[:data_path] && block_given?
-        transform(&block)
+        block.call(@params[:data_path])
       else
         random_generate
       end
@@ -36,10 +37,6 @@ class DataSource
     file.close
   end
 
-  def transform(&block)
-    data = block.call(@params[:data_path])
-    file
-  end
   def random_generate
     ret = []
     1.upto(@size) do 
