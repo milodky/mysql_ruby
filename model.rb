@@ -36,11 +36,7 @@ class Model
     schema = @schema
     db.create_table?(table) do 
       primary_key schema[:primary_key]
-      Array(schema[:columns]).each do |col|
-        # column col[:name], col[:type]
-        send(col[:type], col[:name])#, col[:type]
-      end
-
+      Array(schema[:columns]).each { |col| send(col[:type], col[:name]) }
       Array(schema[:indexes]).each do |idx|
         index idx
       end

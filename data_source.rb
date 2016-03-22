@@ -21,20 +21,34 @@ class DataSource
         DATA_SET[key] << Faker.const_get(type).send(key)
       end
     end
-    
   end
 
-  
-  
-  def load
+  def load(&block)
     file = File.open(@params[:source_path], 'w')
+    data = 
+      if @params[:data_path] && block_given?
+        transform(&block)
+      else
+        random_generate
+      end
+    file.puts(data)
+  ensure
+    file.close
+  end
+
+  def transform(&block)
+    data = block.call(@params[:data_path])
+    file
+  end
+  def random_generate
+    ret = []
     1.upto(@size) do 
       value = @keys.map do |k|
         key = k[:key]
         DATA_SET[key].sample
       end.join('|').downcase
-      file.puts(value)
+      ret << value
     end
-    file.close
+    ret
   end
 end
